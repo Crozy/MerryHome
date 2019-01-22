@@ -5,6 +5,7 @@ import SpeechRecognition from 'react-speech-recognition'
 
 import {getExpressions, sendRequest, subscribeToEvent} from '../utils/serverhome-api'
 import {searchRequest} from '../utils/voice-helper'
+import MovieComponent from './MovieComponents'
 
 const propTypes = {
   // Props injected by SpeechRecognition
@@ -84,14 +85,14 @@ class VoiceRecognition extends Component {
         if (!browserSupportsSpeechRecognition) {
             return <div>Pour utiliser la reconnaissance vocale, merci d'utiliser google chrome ;)</div>;
         }
-        var test = this.state.response ? this.state.response : "";
+        var test = this.state.response ? <MovieComponent info={this.state.response}/> : "";
         return (
             <div>
                <Glyphicon glyph="comment" className={"voice-icon "+(this.props.listening  ? "listening" : "")} />
                { this.props.listening  ? 
                 <Button bsStyle="danger" onClick={stopListening}><Glyphicon glyph="stop" /> stop </Button> : 
                 <Button bsStyle="info" onClick={startListening }><Glyphicon glyph="play" /> start </Button> }
-                <div>{test.page}</div>
+                <div>{test}</div>
             </div>
         );
     };

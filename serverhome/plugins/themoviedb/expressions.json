@@ -1,5 +1,4 @@
 { 
-    "SearchSerie": "Recherche série (?P<searchValue>.+\\s?.*\\s?.*)",
-    "whois": 	"qui est (?P<searchValue>.+\\s?.*\\s?.*)",
-    "whatis": 	"qu'est-ce (qu'un|que|qu'une) (?P<searchValue>.+\\s?.*\\s?.*)"
+    "SearchSerie": "Recherche la série (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchMovie": "Recherche le film (?P<searchValue>.+\\s?.*\\s?.*)"
 }

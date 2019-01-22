@@ -18,22 +18,22 @@ class WikipediaController {
 			{
      			lesNoms = lesNoms+", "+response.results[i].name;
 			}
-				res.end(JSON.stringify({resultText: lesNoms}));
+				res.end(JSON.stringify({resultText: "Il y a " + response.results.length + " réponse. Ce sont : " + lesNoms}));
+			//res.end({response});
 			break;
-			case "whois":
-            case "whatis":
-                var requestUrl="https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
-                requestUrl += parseDataSend(req.body.searchValue);
-                console.log(requestUrl);
-                var wikiReq = request('GET', requestUrl,{cache:'file'});
-                var response = JSON.parse(wikiReq.getBody('utf8'));
-                var textResponse= parseDataResponse(response);
-                if(!textResponse){
-                    res.end(JSON.stringify({resultText: "je n'ai pas d'informations"}));
-                }else{
-                    res.end(JSON.stringify({resultText: textResponse}));
-                }
-                break;
+			case "SearchMovie": 
+			var requestUrl="https://api.themoviedb.org/3/search/movie?query=" + req.body.searchValue + "&api_key=829549883362a2a4620637ad10662863&language=fr-FR&page=1";
+			console.log(requestUrl);
+			var wikiReq = request('GET', requestUrl,{cache:'file'});
+			var response = JSON.parse(wikiReq.getBody('utf8'));
+			var lesNoms = "";
+			//for(var i= 0; i < response.results.length; i++)
+			//{
+     		//	lesNoms = lesNoms+", "+response.results[i].title;
+			//}
+			//	res.end(JSON.stringify({resultText: "Il y a " + response.results.length + " réponse. Ce sont : " + lesNoms}));
+			res.end(JSON.stringify({response}));
+			break;
             default:
                 res.end(JSON.stringify({}));
                 break;

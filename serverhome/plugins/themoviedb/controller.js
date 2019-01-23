@@ -9,30 +9,46 @@ class WikipediaController {
     postAction(req, res){
         switch(req.params.actionId){
 			case "SearchSerie": 
-			var requestUrl="https://api.themoviedb.org/3/search/tv?query=" + req.body.searchValue + "&api_key=829549883362a2a4620637ad10662863&language=fr-FR&page=1";
-			console.log(requestUrl);
-			var wikiReq = request('GET', requestUrl,{cache:'file'});
-			var response = JSON.parse(wikiReq.getBody('utf8'));
-			var lesNoms = "";
-			for(var i= 0; i < response.results.length; i++)
-			{
-     			lesNoms = lesNoms+", "+response.results[i].name;
-			}
-				res.end(JSON.stringify({resultText: "Il y a " + response.results.length + " réponse. Ce sont : " + lesNoms}));
-			//res.end({response});
+			resultatMovies("tv", req, res);
+			break;
+			case "SearchSerie1": 
+			resultatMovies("tv", req, res);
+			break;
+			case "SearchSerie2": 
+			resultatMovies("tv", req, res);
+			break;
+			case "SearchSerie3": 
+			resultatMovies("tv", req, res);
+			break;
+			case "SearchSerie4": 
+			resultatMovies("tv", req, res);
 			break;
 			case "SearchMovie": 
-			var requestUrl="https://api.themoviedb.org/3/search/movie?query=" + req.body.searchValue + "&api_key=829549883362a2a4620637ad10662863&language=fr-FR&page=1";
-			console.log(requestUrl);
-			var wikiReq = request('GET', requestUrl,{cache:'file'});
-			var response = JSON.parse(wikiReq.getBody('utf8'));
-			var lesNoms = "";
-			//for(var i= 0; i < response.results.length; i++)
-			//{
-     		//	lesNoms = lesNoms+", "+response.results[i].title;
-			//}
-			//	res.end(JSON.stringify({resultText: "Il y a " + response.results.length + " réponse. Ce sont : " + lesNoms}));
-			res.end(JSON.stringify({response}));
+			resultatMovies("movie", req, res);
+			break;
+			case "SearchMovie1": 
+			resultatMovies("movie", req, res);
+			break;
+			case "SearchMovie2": 
+			resultatMovies("movie", req, res);
+			break;
+			case "SearchMovie3": 
+			resultatMovies("movie", req, res);
+			break;
+			case "SearchMovie4": 
+			resultatMovies("movie", req, res);
+			break;
+			case "TopMovies": 
+			resultatTop("movie", req, res);
+			break;
+			case "TopSeries": 
+			resultatTop("tv", req, res);
+			break;
+			case "VideoSerie":
+			getVideo("tv", req, res);
+			break;
+			case "VideoMovie":
+			getVideo("movie", req, res);
 			break;
             default:
                 res.end(JSON.stringify({}));
@@ -41,6 +57,54 @@ class WikipediaController {
         }
     }
 }
+
+//movieOrSerie -> tv ou movie
+function resultatMovies(movieOrSerie, req, res){
+	var requestUrl="https://api.themoviedb.org/3/search/" + movieOrSerie + "?query=" + req.body.searchValue + "&api_key=829549883362a2a4620637ad10662863&language=fr-FR&page=1";
+			console.log(requestUrl);
+			var wikiReq = request('GET', requestUrl,{cache:'file'});
+			var response = JSON.parse(wikiReq.getBody('utf8'));
+			res.end(JSON.stringify({response}));
+}
+
+function resultatTop(movieOrSerie, req, res){
+	var requestUrl="https://api.themoviedb.org/3/discover/" + movieOrSerie + "?api_key=829549883362a2a4620637ad10662863&language=fr-FR";
+			console.log(requestUrl);
+			var wikiReq = request('GET', requestUrl,{cache:'file'});
+			var response = JSON.parse(wikiReq.getBody('utf8'));
+			res.end(JSON.stringify({response}));
+}
+
+function getVideo(movieOrSerie, req, res){
+	var requestUrl="https://api.themoviedb.org/3/search/" + movieOrSerie + "?query=" + req.body.searchValue + "&api_key=829549883362a2a4620637ad10662863&language=fr-FR&page=1";
+			console.log(requestUrl);
+			var wikiReq = request('GET', requestUrl,{cache:'file'});
+			var response = JSON.parse(wikiReq.getBody('utf8'));
+			var dataList = response.results ? response.results : [];
+			var id = 0;
+			if(movieOrSerie == "tv"){
+				for(i = 0;i<dataList.length;i++){
+					if(req.body.searchValue.toLowerCase() == dataList[i].name.toLowerCase()){
+						id = dataList[i].id;
+					}
+				}
+			}
+			if(movieOrSerie == "movie"){
+				for(i = 0;i<dataList.length;i++){
+					if(req.body.searchValue.toLowerCase() == dataList[i].title.toLowerCase()){
+						id = dataList[i].id;
+					}
+				}
+			}
+			console.log("Le DATA : " + id);
+			var requestUrl="https://api.themoviedb.org/3/tv/" + id + "/videos?api_key=829549883362a2a4620637ad10662863";
+			console.log(requestUrl);
+			var wikiReq = request('GET', requestUrl,{cache:'file'});
+			var response = JSON.parse(wikiReq.getBody('utf8'));
+			res.end(JSON.stringify({response}));
+			//res.end(JSON.stringify(false));
+}
+
 
 function parseDataSend(data){
 	if(data.indexOf(" ")){

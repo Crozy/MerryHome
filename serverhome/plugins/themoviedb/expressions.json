@@ -1,4 +1,16 @@
 { 
     "SearchSerie": "Recherche la série (?P<searchValue>.+\\s?.*\\s?.*)",
-    "SearchMovie": "Recherche le film (?P<searchValue>.+\\s?.*\\s?.*)"
+    "SearchSerie1": "Cherche la série (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchSerie2": "Je cherche la série (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchSerie3": "Cherche-moi la série (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchSerie4": "Recherche-moi la série (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchMovie": "Cherche le film (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchMovie1": "Recherche le film (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchMovie2": "Je cherche le film (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchMovie3": "Cherche-moi le film (?P<searchValue>.+\\s?.*\\s?.*)",
+    "SearchMovie4": "Recherche-moi le film (?P<searchValue>.+\\s?.*\\s?.*)",
+    "TopMovies": "top film",
+    "TopSeries": "Top série",
+    "VideoSerie": "affiche-moi une bande-annonce de la série (?P<searchValue>.+\\s?.*\\s?.*)",
+    "VideoMovie": "affiche-moi une bande-annonce du film (?P<searchValue>.+\\s?.*\\s?.*)"
 }

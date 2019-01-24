@@ -1,9 +1,9 @@
 import React, { PropTypes, Component } from 'react'
 import {isConfigured} from '../utils/authservice'
-import { Button, Glyphicon } from 'react-bootstrap'
+import { Button, Glyphicon, Form, FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
 
-import {getExpressions, sendRequest, subscribeToEvent} from '../utils/serverhome-api'
+import {getExpressions, sendRequest, emitEvent, subscribeToEvent} from '../utils/serverhome-api'
 import {searchRequest} from '../utils/voice-helper'
 import MovieComponent from './MovieComponents'
 
@@ -21,9 +21,16 @@ class VoiceRecognition extends Component {
         this.state = { expressions: [],
                        conversation: [],
                        response: "",
-                       movieOrSerie: ""
+                       movieOrSerie: "",
+                       searchValue: ""
                     };
     }
+
+    handleChange (event) {
+        this.setState({
+             searchValue: event.target.value
+         });
+     }
 
     componentDidMount(){
         if(!isConfigured()) return;
@@ -80,60 +87,12 @@ class VoiceRecognition extends Component {
                 window.speechSynthesis.speak(utterThis); // Le programme parle
                 this.state.movieOrSerie = "serie";
 	 		    break;
-	 	    case "SearchSerie1": 
-                var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
-                utterThis.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterThis); // Le programme parle
-                this.state.movieOrSerie = "serie";
-	 	    break;
-	 	    case "SearchSerie2": 
-                var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
-                utterThis.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterThis); // Le programme parle
-                this.state.movieOrSerie = "serie";
-	 	    break;
-	 	    case "SearchSerie3": 
-                var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
-                utterThis.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterThis); // Le programme parle
-                this.state.movieOrSerie = "serie";
-	 	    break;
-	 	    case "SearchSerie4": 
-                var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
-                utterThis.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterThis); // Le programme parle
-                this.state.movieOrSerie = "serie";
-	 	    break;
 	 		case "SearchMovie": 
                 var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
                 utterThis.lang = 'fr-FR';
                 window.speechSynthesis.speak(utterThis); // Le programme parle
                 this.state.movieOrSerie = "movie";
 	 		break;
-	 		case "SearchMovie1": 
-                var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
-                utterThis.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterThis); // Le programme parle
-                this.state.movieOrSerie = "movie";
-	 		break;
-	 		case "SearchMovie2": 
-                var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
-                utterThis.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterThis); // Le programme parle
-                this.state.movieOrSerie = "movie";
-	 		break;
-	 		case "SearchMovie3": 
-                var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
-                utterThis.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterThis); // Le programme parle
-                this.state.movieOrSerie = "movie";
-	 		break;
-	 		case "SearchMovie4": 
-                var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
-                utterThis.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterThis); // Le programme parle
-                this.state.movieOrSerie = "movie";
-             break;
              case "TopMovies": 
                 //var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
                 var utterThis = new SpeechSynthesisUtterance("Voici les meilleurs films du moment, les 3 premier sont : " + dataList[0].title +", "+ dataList[1].title +", "+ dataList[2].title);
@@ -168,6 +127,35 @@ class VoiceRecognition extends Component {
          }
      }
 
+     handleSubmit (event) {
+        console.log("emit event themoviedbsearch : "+this.state.searchValue);
+
+        var objRequest = searchRequest(this.state.searchValue, this.state.expressions);
+
+
+        console.log(objRequest);
+        emitEvent("themoviedbsearch", this.state.searchValue);
+        var self= this;
+        this.sendData(objRequest);
+        // sendRequest("themoviedb", objRequest.action, {searchValue: objRequest.data.searchValue}).then((data)=>{
+        //     console.log(data);
+        //     if(data.resultText){
+        //         var utterThis = new SpeechSynthesisUtterance(data.resultText);
+        //         utterThis.lang = 'fr-FR';
+        //         console.log({"response":data.resultText});
+        //         window.speechSynthesis.speak(utterThis);
+        //         self.setState({
+        //             shortResult: data.resultText
+        //         });
+        //         console.log({"response":data.response});
+        //         this.reponseVoie(objRequest.action, data, objRequest);
+        //         this.setState({"response": data.response})
+        //     }
+        // });
+        if(event){
+            event.preventDefault();
+        }
+    }
 
     render() {
         const { startListening, stopListening, browserSupportsSpeechRecognition } = this.props;
@@ -186,6 +174,14 @@ class VoiceRecognition extends Component {
                { this.props.listening  ? 
                 <Button bsStyle="danger" onClick={stopListening}><Glyphicon glyph="stop" /> stop </Button> : 
                 <Button bsStyle="info" onClick={startListening }><Glyphicon glyph="play" /> start </Button> }
+                
+                <Form onSubmit={this.handleSubmit.bind(this)} inline>
+                    <FormGroup controlId="formInlineName">
+                        <ControlLabel>Search</ControlLabel>
+                        <FormControl type="text" placeholder="terms" value={this.state.searchValue} onChange={this.handleChange.bind(this)} />
+                    </FormGroup>
+                    <Button type="submit"><Glyphicon glyph="search" /></Button>
+                </Form>
                 <div>{resultats}</div>
             </div>
         );

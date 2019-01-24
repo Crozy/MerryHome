@@ -79,6 +79,7 @@ function getVideo(movieOrSerie, req, res){
 	var requestUrl="https://api.themoviedb.org/3/search/" + movieOrSerie + "?query=" + req.body.searchValue + "&api_key=829549883362a2a4620637ad10662863&language=fr-FR&page=1";
 			console.log(requestUrl);
 			var wikiReq = request('GET', requestUrl,{cache:'file'});
+			console.log(wikiReq.statusCode);
 			var response = JSON.parse(wikiReq.getBody('utf8'));
 			var dataList = response.results ? response.results : [];
 			var id = 0;

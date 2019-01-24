@@ -199,11 +199,13 @@ class VoiceRecognition extends Component {
         console.log("Valeur de resultat : " + resultats);
         return (
             <div>
+                <h2>MovieDB</h2>
                <Glyphicon glyph="comment" className={"voice-icon "+(this.props.listening  ? "listening" : "")} />
                { this.props.listening  ? 
                 <Button bsStyle="danger" onClick={stopListening}><Glyphicon glyph="stop" /> stop </Button> : 
                 <Button bsStyle="info" onClick={startListening }><Glyphicon glyph="play" /> start </Button> }
-                
+                <br></br>
+                <br></br>
                 <Form onSubmit={this.handleSubmit.bind(this)} inline>
                     <FormGroup controlId="formInlineName">
                         <ControlLabel>Search</ControlLabel>
@@ -211,6 +213,7 @@ class VoiceRecognition extends Component {
                     </FormGroup>
                     <Button type="submit"><Glyphicon glyph="search" /></Button>
                 </Form>
+                <br></br>
                 <div>{resultats}</div>
             </div>
         );

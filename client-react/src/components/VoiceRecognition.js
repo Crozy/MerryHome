@@ -195,7 +195,8 @@ class VoiceRecognition extends Component {
         if (!browserSupportsSpeechRecognition) {
             return <div>Pour utiliser la reconnaissance vocale, merci d'utiliser google chrome ;)</div>;
         }
-        var resultats = this.state.response ? <MovieComponent info={this.state.response} demande={this.state.movieOrSerie}/> : "";
+        var resultats = this.state.response ? <MovieComponent info={this.state.response} demande={this.state.movieOrSerie}/> : "Aucun resultat";
+        console.log("Valeur de resultat : " + resultats);
         return (
             <div>
                <Glyphicon glyph="comment" className={"voice-icon "+(this.props.listening  ? "listening" : "")} />

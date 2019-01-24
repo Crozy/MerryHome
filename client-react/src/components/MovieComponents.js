@@ -5,6 +5,11 @@ export default function MovieComponents(props){
     //if(props.info != null && props.demande == "affichage"){
         if(props.info != null){
        console.log(props.info);
+       if(props.info.status_code == 404){
+        return <div>
+        <h1>Aucune résultat</h1>
+        </div>;
+       }else{
        if(props.info.results.length > 0){
     //    var titre = "";
     //    if(props.info.title != null){
@@ -64,6 +69,7 @@ export default function MovieComponents(props){
         </div>;
     }
    }
+}
 //    else if(props.info != null && props.demande == "data"){
 //        var top3;
 //     props.info.results.map((item, index) => (
@@ -74,7 +80,8 @@ export default function MovieComponents(props){
 //         ));
 //    }   
    else{
-        return "rien";
+        return <div>
+        <h1>Aucune résultat</h1>
+        </div>;
    }
-
 }

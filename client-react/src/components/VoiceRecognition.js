@@ -76,7 +76,7 @@ class VoiceRecognition extends Component {
 
      reponseVoie(questionPosé, data, objRequest){
         //var dataList = this.state.response ? <MovieComponent info={this.state.response} demande="data"/> : "";
-        var dataList = data.response.results ? data.response.results : [];
+        //var dataList = data.response.results ? data.response.results : [];
         // console.log("ICI là");
         // console.log(dataList[0]);
         // console.log(dataList[0].title);
@@ -94,14 +94,18 @@ class VoiceRecognition extends Component {
                 this.state.movieOrSerie = "movie";
 	 		break;
              case "TopMovies": 
+             //if(data.response.results != null){
+             var dataList = data.response.results ? data.response.results : [];
                 //var utterThis = new SpeechSynthesisUtterance(data.response.total_results + "résultats on été trouvé pour " + objRequest.data.searchValue);
                 var utterThis = new SpeechSynthesisUtterance("Voici les meilleurs films du moment, les 3 premier sont : " + dataList[0].title +", "+ dataList[1].title +", "+ dataList[2].title);
                 console.log("Voici les meilleurs films du moment, les 3 premier sont : " + dataList[0].title +", "+ dataList[1].title +", "+ dataList[2].title);
                 utterThis.lang = 'fr-FR';
                 window.speechSynthesis.speak(utterThis); // Le programme parle
                 this.state.movieOrSerie = "movie";
+             //}
              break;
              case "TopSeries": 
+             var dataList = data.response.results ? data.response.results : [];
                 var utterThis = new SpeechSynthesisUtterance("Voici les meilleurs films du moment, les 3 premier sont : " + dataList[0].name +", "+ dataList[1].name +", "+ dataList[2].name);
                 console.log("Voici les meilleurs films du moment, les 3 premier sont : " + dataList[0].name +", "+ dataList[1].name +", "+ dataList[2].name);
                 utterThis.lang = 'fr-FR';
@@ -109,18 +113,42 @@ class VoiceRecognition extends Component {
                 this.state.movieOrSerie = "serie";
              break;
              case "VideoSerie":
+             try{
+                var dataList = data.response.results ? data.response.results : [];
+                if(dataList != null){
                 var utterThis = new SpeechSynthesisUtterance("Voici une bande-annonce de la série " + objRequest.data.searchValue);
                 console.log("Voici une bande-annonce de la série " + objRequest.data.searchValue);
                 utterThis.lang = 'fr-FR';
                 window.speechSynthesis.speak(utterThis); // Le programme parle
                 this.state.movieOrSerie = "video";
+                }
+            }
+            catch{
+                    var utterThis = new SpeechSynthesisUtterance("Aucune bande-annonce de la série " + objRequest.data.searchValue + " n'a été trouvé");
+                    console.log("Aucune bande-annonce du film " + objRequest.data.searchValue + " n'a été trouvé");
+                    utterThis.lang = 'fr-FR';
+                    window.speechSynthesis.speak(utterThis); // Le programme parle
+                    this.state.movieOrSerie = "video";
+                }
                 break;
             case "VideoMovie":
+            try{
+                var dataList = data.response.results ? data.response.results : [];
+                if(dataList != null){
                 var utterThis = new SpeechSynthesisUtterance("Voici une bande-annonce du film " + objRequest.data.searchValue);
                 console.log("Voici une bande-annonce du film " + objRequest.data.searchValue);
                 utterThis.lang = 'fr-FR';
                 window.speechSynthesis.speak(utterThis); // Le programme parle
                 this.state.movieOrSerie = "video";
+                }
+            }
+            catch{
+                var utterThis = new SpeechSynthesisUtterance("Aucune bande-annonce du film " + objRequest.data.searchValue + " n'a été trouvé");
+                console.log("Aucune bande-annonce du film " + objRequest.data.searchValue + " n'a été trouvé");
+                utterThis.lang = 'fr-FR';
+                window.speechSynthesis.speak(utterThis); // Le programme parle
+                this.state.movieOrSerie = "video";
+            }
                 break;
              default:
                  break;

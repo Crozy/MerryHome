@@ -5,6 +5,7 @@ export default function MovieComponents(props){
     //if(props.info != null && props.demande == "affichage"){
         if(props.info != null){
        console.log(props.info);
+       if(props.info.results.length > 0){
     //    var titre = "";
     //    if(props.info.title != null){
     //        titre = props.info.title;
@@ -46,21 +47,22 @@ export default function MovieComponents(props){
         </div>;  
        }
        var youtube = "https://www.youtube.com/embed/";
-       if(props.demande === "video"){
+       if(props.demande === "video" && props.info.status_code == null){
            var randonVideo = Math.floor(Math.random() * Math.floor(props.info.results.length));
         return <div>
             <h1>{props.info.name}</h1>
             <iframe width="560" height="315" src={youtube + props.info.results[randonVideo].key} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        {/* { props.info.results.map((item, index) => (
-            
-            <div key={index}>
-                <h1>{item.name}</h1>
-                <br/>
-                <p>https://www.youtube.com/watch?v={item.key}</p>
-            </div>
-            ))}   */}
-        </div>;  
+        </div>;
+       }else{
+        return <div>
+        <h1>Aucune vidéo trouvé</h1>
+        </div>;
        }
+    }else{
+        return <div>
+        <h1>Aucune résultat</h1>
+        </div>;
+    }
    }
 //    else if(props.info != null && props.demande == "data"){
 //        var top3;
